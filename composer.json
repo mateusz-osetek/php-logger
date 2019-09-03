@@ -1,0 +1,22 @@
+{
+    "name": "mosetek/logger",
+    "description": "Simple interface for information and errors logging",
+    "keywords": ["log", "logger"],
+    "type": "library",
+    "homepage": "https://github.com/mateusz-osetek",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mateusz Osetek",
+            "email": "osetek.mateusz@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "mosetek\\Logger\\": "Logger/"
+        }
+    }
+}
