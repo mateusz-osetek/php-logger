@@ -3,7 +3,7 @@
     "description": "Simple interface for information and errors logging",
     "keywords": ["log", "logger"],
     "type": "library",
-    "homepage": "https://github.com/mateusz-osetek",
+    "homepage": "https://github.com/mateusz-osetek/php-logger",
     "license": "MIT",
     "authors": [
         {
