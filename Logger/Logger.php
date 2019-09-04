@@ -2,6 +2,12 @@
 
 namespace mosetek\Logger;
 
+/**
+ * @author Mateusz Osetek
+ * @email osetek.mateusz@gmail.com
+ * @license MIT
+ */
+
 class Logger implements LoggerInterface
 {
     /**
