@@ -1,13 +1,13 @@
-##Simple PHP Logger
+<h2>Simple PHP Logger</h2>
 <hr/>
 
-###Requirements
+<h3>Requirements</h3>
 Logger running on PHP >= 7.1.
 
-###Installation
+<h3>Installation</h3>
 For now you have to download it manually from GitHub.
 
-###Usage
+<h3>Usage</h3>
 <b>Initializing the logger</b><br/>
 If you want to initialize logger with default path and filename (`logs/.log`) just use:
 
