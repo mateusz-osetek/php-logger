@@ -6,7 +6,7 @@ Logger running on PHP >= 7.1.
 <hr/>
 
 <h3>Installation</h3>
-For now you have to download it manually from GitHub.
+Download it manually from GitHub or by composer: `composer require mosetek/logger:dev-master`
 
 <hr/>
 
