@@ -3,8 +3,12 @@
 <h3>Requirements</h3>
 Logger running on PHP >= 7.1.
 
+<hr/>
+
 <h3>Installation</h3>
 For now you have to download it manually from GitHub.
+
+<hr/>
 
 <h3>Usage</h3>
 <b>Initializing the logger</b><br/>
@@ -29,6 +33,27 @@ Also you can initialize logger with custom date format as the last parameter. Lo
 ```
 $logger = new Logger('some/path', 'filename', 'H:i:s');
 ```
+
+<br/><br/>
+
+<b>Another path and filename options</b><br/>
+You can get path, full path to file, filename or date format any time you need:
+
+```
+$logger->getPath();        //Returns: some/path/to/
+$logger->getFullPath();    //Returns: some/path/to/file.txt
+$logger->getFilename();    //Returns: file.txt
+$logger->getDateFormat();  //Returns: Y-m-d H:i:s
+```
+
+You can also set another filename or path:
+
+```
+$logger->setPath('some/new/path');
+$logger->setFilename('new_filename.txt');
+$logger->setDateFormat('Y-m');
+```
+
 
 <br/><br/>
 
@@ -89,13 +114,4 @@ Of course you can determine path to another file to drop as well
 
 ```
 $logger->drop('some/path/to/file.txt');
-```
-
-<br/><br/>
-
-<b>Get path to log file</b><br/>
-If you need to check or determine somewhere the full path to your current log file just use:
-
-```
-$logger->getPath();
 ```
