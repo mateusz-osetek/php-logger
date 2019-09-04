@@ -88,6 +88,7 @@ You can send your log file by email use `send($to)`. Method will grab contents o
 $logger->send('somebody@email.com');
 ```
 Your server must support `sendmail` to use the above. If you're using UNIX-like systems please take care of installing <a href="http://www.postfix.org">postfix</a>. 
+
 <br/>
 
 <b>Wiping and deleting log file</b><br/>
@@ -116,3 +117,28 @@ Of course you can determine path to another file to drop as well
 ```
 $logger->drop('some/path/to/file.txt');
 ```
+
+<br/>
+
+<b>Checking size of file</b><br/>
+You can check the size of a file by using below:
+
+```
+$logger->getFilesize();
+```
+
+Method by default returns size in megabytes. You can determine another unit by passing argument.
+
+```
+$logger->getFilezise();       //Returns in megabytes
+$logger->getFilezise('B');    //Returns in bytes
+$logger->getFilezise('KB');   //Returns in kilobytes
+$logger->getFilezise('GB');   //Returns in gigabytes
+```
+
+If you want you can check size of any other file by passing path in second argument:
+
+```
+$logger->getFilesize('MB', 'path/to/file.txt');
+```
+
