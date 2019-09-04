@@ -31,22 +31,7 @@ interface LoggerInterface
     public function drop(string $path): void;
 
     /**
-     * @param string $path
-     */
-    public function setPath(string $path): void;
-
-    /**
      * @return string|null
      */
     public function getPath(): ?string;
-
-    /**
-     * @param string $filename
-     */
-    public function setFilename(string $filename): void;
-
-    /**
-     * @param string $dateFormat
-     */
-    public function setDateFormat(string $dateFormat): void;
 }

@@ -7,26 +7,29 @@ class Logger implements LoggerInterface
     /**
      * @var string
      */
-    private $dateFormat = 'Y-m-d H:i:s';
+    private $dateFormat;
 
     /**
      * @var string
      */
-    private $path = 'logs/';
+    private $path;
 
     /**
      * @var string
      */
-    private $filename = 'error.log';
+    protected $filename;
 
     /**
      * @var string
      */
     protected $fullPath;
 
-    public function __construct()
+    public function __construct(string $path = 'logs/', string $filename = '.log', string $dateFormat = 'Y-m-d H:i:s')
     {
-        $this->fullPath = $this->path . $this->filename;
+        $this->path = $path;
+        $this->filename = $filename;
+        $this->dateFormat = $dateFormat;
+        $this->fullPath = $this->formatPath();
     }
 
     public function put(string $message): void
@@ -68,23 +71,18 @@ class Logger implements LoggerInterface
         unlink($path);
     }
 
-    public function setPath(string $path): void
-    {
-        $this->path = $path;
-    }
-
     public function getPath(): ?string
     {
+        return $this->fullPath;
+    }
+
+    private function formatPath(): string
+    {
+        $this->path = str_replace('\\', '/', $this->path);
+        $this->filename = str_replace(['\\', '/'], ['/', ''], $this->filename);
+        if ('/' !== substr($this->path, -1)) {
+            $this->path .= '/';
+        }
         return $this->path . $this->filename;
-    }
-
-    public function setFilename(string $filename): void
-    {
-        $this->filename = $filename;
-    }
-
-    public function setDateFormat(string $dateFormat): void
-    {
-        $this->dateFormat = $dateFormat;
     }
 }
