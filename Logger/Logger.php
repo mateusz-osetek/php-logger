@@ -82,16 +82,6 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @param string $to
-     * @param string $subject
-     * @param string $pathToFile
-     */
-    public function sendAsAttachment(string $to, string $subject, string $pathToFile): void
-    {
-        // TODO: Implement sendAsAttachment() method.
-    }
-
-    /**
      * @param string $path
      */
     public function wipe(string $path = ''): void
@@ -143,6 +133,25 @@ class Logger implements LoggerInterface
     public function setFilename(?string $filename): void
     {
         $this->filename = $filename;
+    }
+
+    /**
+     * @param string|null $path
+     * @param string $unit
+     * @return float|null
+     */
+    public function getFilesize(?string $unit = 'MB', ?string $path = ''): ?float
+    {
+        if (empty($path)) {
+            $path = $this->getFullPath();
+        }
+
+        switch ($unit) {
+            case 'B': return filesize($path); break;
+            case 'KB': return filesize($path) * (10 ** -3); break;
+            case 'GB': return filesize($path) * (10 ** -9); break;
+            default: return filesize($path) * (10 ** -6);
+        }
     }
 
     /**

@@ -28,13 +28,6 @@ interface LoggerInterface
     public function send(string $to, string $subject): void;
 
     /**
-     * @param string $to
-     * @param string $subject
-     * @param string $pathToFile
-     */
-    public function sendAsAttachment(string $to, string $subject, string $pathToFile): void;
-
-    /**
      * @param string $path
      */
     public function wipe(string $path): void;
@@ -68,6 +61,13 @@ interface LoggerInterface
      * @param string|null $filename
      */
     public function setFilename(?string $filename): void;
+
+    /**
+     * @param string|null $path
+     * @param string $unit
+     * @return float|null
+     */
+    public function getFilesize(string $unit, ?string $path): ?float;
 
     /**
      * @return string
