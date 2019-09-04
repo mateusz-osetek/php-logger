@@ -1,5 +1,4 @@
 <h2>Simple PHP Logger</h2>
-<hr/>
 
 <h3>Requirements</h3>
 Logger running on PHP >= 7.1.
@@ -17,7 +16,7 @@ $logger = new Logger();
 
 <br/>
 
-If you want to initalize logger on another path with another filename you can do this by defining those while creating new object.
+If you want to initialize logger on another path with another filename you can do this by defining those while creating new object.
 
 ```
 $logger = new Logger('some/path/', 'filename'); 
