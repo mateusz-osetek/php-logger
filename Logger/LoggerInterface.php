@@ -2,6 +2,12 @@
 
 namespace mosetek\Logger;
 
+/**
+ * @author Mateusz Osetek
+ * @email osetek.mateusz@gmail.com
+ * @license MIT
+ */
+
 interface LoggerInterface
 {
     /**
@@ -17,8 +23,9 @@ interface LoggerInterface
 
     /**
      * @param string $to
+     * @param string $subject
      */
-    public function send(string $to): void;
+    public function send(string $to, string $subject): void;
 
     /**
      * @param string $path
@@ -34,4 +41,41 @@ interface LoggerInterface
      * @return string|null
      */
     public function getPath(): ?string;
+
+    /**
+     * @param string $path
+     */
+    public function setPath(?string $path): void;
+
+    /**
+     * @return string
+     */
+    public function getFullPath(): string;
+
+    /**
+     * @return string|null
+     */
+    public function getFilename(): ?string;
+
+    /**
+     * @param string|null $filename
+     */
+    public function setFilename(?string $filename): void;
+
+    /**
+     * @param string|null $path
+     * @param string $unit
+     * @return float|null
+     */
+    public function getFilesize(string $unit, ?string $path): ?float;
+
+    /**
+     * @return string
+     */
+    public function getDateFormat(): string;
+
+    /**
+     * @param string $dateFormat
+     */
+    public function setDateFormat(string $dateFormat): void;
 }

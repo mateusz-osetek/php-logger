@@ -3,11 +3,16 @@
 <h3>Requirements</h3>
 Logger running on PHP >= 7.1.
 
+<hr/>
+
 <h3>Installation</h3>
 For now you have to download it manually from GitHub.
 
+<hr/>
+
 <h3>Usage</h3>
 <b>Initializing the logger</b><br/>
+
 If you want to initialize logger with default path and filename (`logs/.log`) just use:
 
 ```
@@ -30,7 +35,28 @@ Also you can initialize logger with custom date format as the last parameter. Lo
 $logger = new Logger('some/path', 'filename', 'H:i:s');
 ```
 
-<br/><br/>
+<br/>
+
+<b>Another path and filename options</b><br/>
+You can get path, full path to file, filename or date format any time you need:
+
+```
+$logger->getPath();        //Returns: some/path/to/
+$logger->getFullPath();    //Returns: some/path/to/file.txt
+$logger->getFilename();    //Returns: file.txt
+$logger->getDateFormat();  //Returns: Y-m-d H:i:s
+```
+
+You can also set another filename or path:
+
+```
+$logger->setPath('some/new/path');
+$logger->setFilename('new_filename.txt');
+$logger->setDateFormat('Y-m');
+```
+
+
+<br/>
 
 <b>Write and read files</b><br/>
 To put some content into file (defined in object creation) simply use `put()` method. 
@@ -53,7 +79,7 @@ You can also read content of any other text files by adding a path parameter to 
 $logger->read('some/path/to/file.txt');
 ```
 
-<br/><br/>
+<br/>
 
 <b>Send file by email</b><br/>
 You can send your log file by email use `send($to)`. Method will grab contents of your log file and send it as message of email.
@@ -61,8 +87,9 @@ You can send your log file by email use `send($to)`. Method will grab contents o
 ```
 $logger->send('somebody@email.com');
 ```
+Your server must support `sendmail` to use the above. If you're using UNIX-like systems please take care of installing <a href="http://www.postfix.org">postfix</a>. 
 
-<br/><br/>
+<br/>
 
 <b>Wiping and deleting log file</b><br/>
 If you want to empty content of your current file use:
@@ -91,11 +118,27 @@ Of course you can determine path to another file to drop as well
 $logger->drop('some/path/to/file.txt');
 ```
 
-<br/><br/>
+<br/>
 
-<b>Get path to log file</b><br/>
-If you need to check or determine somewhere the full path to your current log file just use:
+<b>Checking size of file</b><br/>
+You can check the size of a file by using below:
 
 ```
-$logger->getPath();
+$logger->getFilesize();
 ```
+
+Method by default returns size in megabytes. You can determine another unit by passing argument.
+
+```
+$logger->getFilezise();       //Returns in megabytes
+$logger->getFilezise('B');    //Returns in bytes
+$logger->getFilezise('KB');   //Returns in kilobytes
+$logger->getFilezise('GB');   //Returns in gigabytes
+```
+
+If you want you can check size of any other file by passing path in second argument:
+
+```
+$logger->getFilesize('MB', 'path/to/file.txt');
+```
+
