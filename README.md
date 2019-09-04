@@ -12,6 +12,7 @@ For now you have to download it manually from GitHub.
 
 <h3>Usage</h3>
 <b>Initializing the logger</b><br/>
+
 If you want to initialize logger with default path and filename (`logs/.log`) just use:
 
 ```
@@ -34,7 +35,7 @@ Also you can initialize logger with custom date format as the last parameter. Lo
 $logger = new Logger('some/path', 'filename', 'H:i:s');
 ```
 
-<br/><br/>
+<br/>
 
 <b>Another path and filename options</b><br/>
 You can get path, full path to file, filename or date format any time you need:
@@ -55,7 +56,7 @@ $logger->setDateFormat('Y-m');
 ```
 
 
-<br/><br/>
+<br/>
 
 <b>Write and read files</b><br/>
 To put some content into file (defined in object creation) simply use `put()` method. 
@@ -78,7 +79,7 @@ You can also read content of any other text files by adding a path parameter to 
 $logger->read('some/path/to/file.txt');
 ```
 
-<br/><br/>
+<br/>
 
 <b>Send file by email</b><br/>
 You can send your log file by email use `send($to)`. Method will grab contents of your log file and send it as message of email.
@@ -86,8 +87,8 @@ You can send your log file by email use `send($to)`. Method will grab contents o
 ```
 $logger->send('somebody@email.com');
 ```
-
-<br/><br/>
+Your server must support `sendmail` to use the above. If you're using UNIX-like systems please take care of installing <a href="http://www.postfix.org">postfix</a>. 
+<br/>
 
 <b>Wiping and deleting log file</b><br/>
 If you want to empty content of your current file use:
