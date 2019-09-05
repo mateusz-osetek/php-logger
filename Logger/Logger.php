@@ -32,11 +32,12 @@ class Logger implements LoggerInterface
 
     /**
      * Logger constructor.
+     *
      * @param string $path
      * @param string $filename
      * @param string $dateFormat
      */
-    public function __construct(string $path = 'logs/', string $filename = '.log', string $dateFormat = 'Y-m-d H:i:s')
+    public function __construct(string $path = 'logs', string $filename = '.log', string $dateFormat = 'Y-m-d H:i:s')
     {
         $this->path = $path;
         $this->filename = $filename;
@@ -45,15 +46,20 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Put content into a file.
+     *
      * @param string $message
      */
     public function put(string $message): void
     {
-        $message = date($this->dateFormat) . " | {$message}\n";
-        file_put_contents($this->getFullPath(), $message, FILE_APPEND);
+        $message = date($this->dateFormat) . " | {$message}".PHP_EOL;
+        $flag = file_exists($this->getFullPath()) ? FILE_APPEND : 0;
+        file_put_contents($this->fullPath, $message, $flag);
     }
 
     /**
+     * Read content of a log file.
+     *
      * @param string $path
      * @return string|null
      */
@@ -66,8 +72,15 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Email a log file.
+     *
      * @param string $to
      * @param string $subject
+     *
+     * @todo Consider using other ways to send emails, and it's better to put them
+     * into an another class in order to easy switch between different methods.
+     *
+     * Use phpmailer/phpmailer package for this.
      */
     public function send(string $to, string $subject = ''): void
     {
@@ -82,6 +95,8 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Emplty content of a log file.
+     *
      * @param string $path
      */
     public function wipe(string $path = ''): void
@@ -93,6 +108,8 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Delete a file.
+     *
      * @param string $path
      */
     public function drop(string $path = ''): void
@@ -104,6 +121,8 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Get full path to a log file.
+     *
      * @return string|null
      */
     public function getPath(): ?string
@@ -112,6 +131,8 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Set path to a file.
+     *
      * @param string|null $path
      */
     public function setPath(?string $path): void
@@ -120,6 +141,19 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Get a log file path.
+     *
+     * @return string
+     */
+    public function getFullPath(): string
+    {
+        $this->setFullPath();
+        return $this->fullPath;
+    }
+
+    /**
+     * Get a log file name.
+     *
      * @return string|null
      */
     public function getFilename(): ?string
@@ -128,6 +162,8 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Set a log file name.
+     *
      * @param string|null $filename
      */
     public function setFilename(?string $filename): void
@@ -136,6 +172,8 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Return a log file size.
+     *
      * @param string|null $path
      * @param string $unit
      * @return float|null
@@ -145,16 +183,25 @@ class Logger implements LoggerInterface
         if (empty($path)) {
             $path = $this->getFullPath();
         }
-
+        $filesize = filesize($path);
         switch ($unit) {
-            case 'B': return filesize($path); break;
-            case 'KB': return filesize($path) * (10 ** -3); break;
-            case 'GB': return filesize($path) * (10 ** -9); break;
-            default: return filesize($path) * (10 ** -6);
+            case 'B':
+                return $filesize;
+                break;
+            case 'KB':
+                return $filesize * (10 ** -3);
+                break;
+            case 'GB':
+                return $filesize * (10 ** -9);
+                break;
+            default:
+                return $filesize * (10 ** -6);
         }
     }
 
     /**
+     * Get a log file date format.
+     *
      * @return string
      */
     public function getDateFormat(): string
@@ -163,6 +210,8 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Set a log file date format.
+     *
      * @param string $dateFormat
      */
     public function setDateFormat(string $dateFormat): void
@@ -171,14 +220,8 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @return string
+     * Sets current log file full path.
      */
-    public function getFullPath(): string
-    {
-        $this->setFullPath();
-        return $this->fullPath;
-    }
-
     private function setFullPath(): void
     {
         $this->fullPath = $this->formatPath();
@@ -189,11 +232,13 @@ class Logger implements LoggerInterface
      */
     private function formatPath(): string
     {
-        $this->path = str_replace('\\', '/', $this->path);
+        $this->path = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $this->path);
         $this->filename = str_replace(['\\', '/'], ['/', ''], $this->filename);
-        if (false === empty($this->path) && '/' !== substr($this->path, -1)) {
-            $this->path .= '/';
+
+        if (!is_dir($this->path)) {
+            mkdir($this->path);
         }
-        return $this->path . $this->filename;
+
+        return $this->path.DIRECTORY_SEPARATOR.$this->filename;
     }
 }
