@@ -3,9 +3,7 @@
 namespace mosetek\Logger;
 
 /**
- * @author Mateusz Osetek
- * @email osetek.mateusz@gmail.com
- * @license MIT
+ * @author Mateusz Osetek <osetek.mateusz@gmail.com>
  */
 
 interface LoggerInterface
@@ -32,6 +30,11 @@ interface LoggerInterface
      * @param string $subject
      */
     public function send(string $to, string $subject): void;
+
+    /**
+     *
+     */
+    public function sendAsAttachment(): void;
 
     /**
      * Emplty content of a log file.

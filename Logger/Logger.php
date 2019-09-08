@@ -2,10 +2,10 @@
 
 namespace mosetek\Logger;
 
+use mosetek\Logger\MailerClient;
+
 /**
- * @author Mateusz Osetek
- * @email osetek.mateusz@gmail.com
- * @license MIT
+ * @author Mateusz Osetek <osetek.mateusz@gmail.com>
  */
 
 class Logger implements LoggerInterface
@@ -23,12 +23,17 @@ class Logger implements LoggerInterface
     /**
      * @var string
      */
-    protected $filename;
+    private $filename;
 
     /**
      * @var string
      */
-    protected $fullPath;
+    private $fullPath;
+
+    /**
+     * @var MailerClient
+     */
+    private $mailerClient;
 
     /**
      * Logger constructor.
@@ -76,11 +81,6 @@ class Logger implements LoggerInterface
      *
      * @param string $to
      * @param string $subject
-     *
-     * @todo Consider using other ways to send emails, and it's better to put them
-     * into an another class in order to easy switch between different methods.
-     *
-     * Use phpmailer/phpmailer package for this.
      */
     public function send(string $to, string $subject = ''): void
     {
@@ -95,7 +95,15 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * Emplty content of a log file.
+     *
+     */
+    public function sendAsAttachment(): void
+    {
+        $this->mailerClient->send();
+    }
+
+    /**
+     * Empty content of a log file.
      *
      * @param string $path
      */
@@ -235,8 +243,8 @@ class Logger implements LoggerInterface
         $this->path = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $this->path);
         $this->filename = str_replace(['\\', '/'], ['/', ''], $this->filename);
 
-        if (!is_dir($this->path)) {
-            mkdir($this->path);
+        if (!mkdir($concurrentDirectory = $this->path) && !is_dir($concurrentDirectory)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         return $this->path.DIRECTORY_SEPARATOR.$this->filename;
