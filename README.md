@@ -1,8 +1,10 @@
 <h2>Simple PHP Logger 1.1.0</h2>
 
 <h3>Requirements</h3>
-- PHP >= 7.1
-- PHPMailer >= 6.0
+<ul>
+    <li>PHP >= 7.1</li>
+    <li>PHPMailer >= 6.0</li>
+</ul>
 
 <hr/>
 
