@@ -2,8 +2,6 @@
 
 namespace mosetek\Logger;
 
-use mosetek\Logger\MailerClient;
-
 /**
  * @author Mateusz Osetek <osetek.mateusz@gmail.com>
  */
@@ -47,6 +45,7 @@ class Logger implements LoggerInterface
         $this->path = $path;
         $this->filename = $filename;
         $this->dateFormat = $dateFormat;
+        $this->mailerClient = new MailerClient();
         $this->setFullPath();
     }
 
@@ -54,10 +53,11 @@ class Logger implements LoggerInterface
      * Put content into a file.
      *
      * @param string $message
+     * @param int $level
      */
-    public function put(string $message): void
+    public function put(string $message, int $level = 0): void
     {
-        $message = date($this->dateFormat) . " | {$message}".PHP_EOL;
+        $message = date($this->dateFormat) . " {$this->getErrorLevel($level)} | {$message}" . PHP_EOL;
         $flag = file_exists($this->getFullPath()) ? FILE_APPEND : 0;
         file_put_contents($this->fullPath, $message, $flag);
     }
@@ -70,13 +70,35 @@ class Logger implements LoggerInterface
      */
     public function read(string $path = ''): ?string
     {
-        if (empty($path)) {
-            $path = $this->getFullPath();
-        }
-        return file_get_contents($path);
+        return file_get_contents($path ?: $this->getFullPath());
     }
 
     /**
+     * Move log file to another directory
+     *
+     * @param string $to
+     * @param string $from
+     */
+    public function move(string $to, string $from = ''): void
+    {
+        $from ?: $this->getFullPath();
+        $this->copy($to, $from);
+        $this->drop($from);
+    }
+
+    /**
+     * Copy log file to another directory
+     *
+     * @param string $to
+     * @param string $from
+     */
+    public function copy(string $to, string $from = ''): void
+    {
+        file_put_contents($to, $this->read($from ?: $this->getFullPath()));
+    }
+
+    /**
+     * @deprecated use Logger::sendAsAttachment() instead
      * Email a log file.
      *
      * @param string $to
@@ -84,22 +106,21 @@ class Logger implements LoggerInterface
      */
     public function send(string $to, string $subject = ''): void
     {
-        if (empty($subject)) {
-            $subject = 'Log information from ' . date($this->dateFormat);
-        }
         mail(
             $to,
-            $subject,
+            $subject ?: 'Log information from ' . date($this->dateFormat),
             $this->read()
         );
     }
 
     /**
-     *
+     * @param string $to
+     * @param string $attachment
+     * @param string $message
      */
-    public function sendAsAttachment(): void
+    public function sendAsAttachment(string $to, string $attachment = '', string $message = ''): void
     {
-        $this->mailerClient->send();
+        $this->mailerClient->send($to, $attachment ?: $this->getFullPath(), $message);
     }
 
     /**
@@ -109,10 +130,7 @@ class Logger implements LoggerInterface
      */
     public function wipe(string $path = ''): void
     {
-        if (empty($path)) {
-            $path = $this->getFullPath();
-        }
-        file_put_contents($path, '');
+        file_put_contents($path ?: $this->getFullPath(), '');
     }
 
     /**
@@ -122,10 +140,7 @@ class Logger implements LoggerInterface
      */
     public function drop(string $path = ''): void
     {
-        if (empty($path)) {
-            $path = $this->getFullPath();
-        }
-        unlink($path);
+        unlink($path ?: $this->getFullPath());
     }
 
     /**
@@ -188,10 +203,9 @@ class Logger implements LoggerInterface
      */
     public function getFilesize(?string $unit = 'MB', ?string $path = ''): ?float
     {
-        if (empty($path)) {
-            $path = $this->getFullPath();
-        }
+        $path = $path ?: $this->getFullPath();
         $filesize = filesize($path);
+
         switch ($unit) {
             case 'B':
                 return $filesize;
@@ -243,10 +257,25 @@ class Logger implements LoggerInterface
         $this->path = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $this->path);
         $this->filename = str_replace(['\\', '/'], ['/', ''], $this->filename);
 
-        if (!mkdir($concurrentDirectory = $this->path) && !is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-        }
+        $this->createDirectoryIfNotExist($this->path);
 
-        return $this->path.DIRECTORY_SEPARATOR.$this->filename;
+        return $this->path . DIRECTORY_SEPARATOR . $this->filename;
+    }
+
+    private function createDirectoryIfNotExist(string $path, int $mode = 0755): void
+    {
+        if (false === is_dir($path)) {
+            mkdir($path, $mode, true);
+        }
+    }
+
+    private function getErrorLevel(int $level): string
+    {
+        switch ($level) {
+            case 1: return '[INFO]'; break;
+            case 2: return '[WARNING]'; break;
+            case 3: return '[ERROR]'; break;
+            default: return '';
+        }
     }
 }

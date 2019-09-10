@@ -12,8 +12,9 @@ interface LoggerInterface
      * Put content into a file.
      *
      * @param string $message
+     * @param int $level
      */
-    public function put(string $message): void;
+    public function put(string $message, int $level): void;
 
     /**
      * Read content of a log file.
@@ -24,6 +25,22 @@ interface LoggerInterface
     public function read(string $path): ?string;
 
     /**
+     * Move log file to another directory
+     *
+     * @param string $to
+     * @param string $from
+     */
+    public function move(string $to, string $from): void;
+
+    /**
+     * Copy log file to another directory
+     *
+     * @param string $to
+     * @param string $from
+     */
+    public function copy(string $to, string $from): void;
+
+    /**
      * Email a log file.
      *
      * @param string $to
@@ -32,12 +49,17 @@ interface LoggerInterface
     public function send(string $to, string $subject): void;
 
     /**
+     * Email a log file as an attachment
      *
+     * @param string $to
+     * @param string $attachment
+     * @param string $message
      */
-    public function sendAsAttachment(): void;
+    public function sendAsAttachment(string $to, string $attachment, string $message): void;
 
     /**
-     * Emplty content of a log file.
+     * @deprecated use Logger::sendAsAttachment() instead
+     * Empty content of a log file.
      *
      * @param string $path
      */

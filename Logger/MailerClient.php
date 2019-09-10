@@ -11,27 +11,33 @@ use PHPMailer\PHPMailer\Exception;
 
 class MailerClient
 {
-    public function send(): void
+    private const HOST = 'smtp.gmail.com';
+    private const USERNAME = 'example@gmail.com';
+    private const PASSWORD = 'secret_pass';
+    private const SMTP_SECURE = 'tls';
+    private const PORT = 587;
+
+    public function send(string $to, string $attachment, string $message): void
     {
         $mail = new PHPMailer(true);
 
         try {
             $mail->isSMTP();
-            $mail->Host = 'smtp1.example.com;smtp2.example.com';
+            $mail->Host = self::HOST;
             $mail->SMTPAuth = true;
-            $mail->Username = 'user@example.com';
-            $mail->Password = 'secret';
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-            $mail->setFrom('from@example.com', 'Mailer');
-            $mail->addAddress('joe@example.net', 'Joe User');
-            $mail->addAttachment('/var/tmp/file.tar.gz');
-            $mail->Subject = 'Here is the subject';
-            $mail->Body = 'This is the HTML message body <b>in bold!</b>';
+            $mail->Username = self::USERNAME;
+            $mail->Password = self::PASSWORD;
+            $mail->SMTPSecure = self::SMTP_SECURE;
+            $mail->Port = self::PORT;
+            $mail->setFrom(self::USERNAME);
+            $mail->addAddress($to);
+            $mail->addAttachment($attachment);
+            $mail->Subject = 'Log file from ' . date('Y-m-d H:i:s');
+            $mail->Body = $message ?: 'Find your file on the attachments section';
             $mail->send();
-            echo 'Message has been sent';
+            echo "Message has been sent\n";
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}\n";
         }
     }
 }
