@@ -1,7 +1,10 @@
-<h2>Simple PHP Logger</h2>
+<h2>Simple PHP Logger 1.1.0</h2>
 
 <h3>Requirements</h3>
-Logger running on PHP >= 7.1.
+<ul>
+    <li>PHP >= 7.1</li>
+    <li>PHPMailer >= 6.0</li>
+</ul>
 
 <hr/>
 
@@ -66,6 +69,22 @@ To put some content into file (defined in object creation) simply use `put()` me
 $logger->put('some log content');
 ```
 
+You can also put some information into file, with some label next to it by adding information level as second parameter;
+
+```
+$logger->put('some log content', 2);
+//That makes your log file looks like that:
+// 2019-09-01 12:02:32 | [WARNING] | some log content
+```
+
+There are three supported labels for information leveling:
+
+```
+1 => [INFO]
+2 => [WARNING]
+3 => [ERROR]
+```
+
 <br/>
 
 If you want to read contents of your log file use `read($path): string`.
@@ -82,13 +101,57 @@ $logger->read('some/path/to/file.txt');
 
 <br/>
 
-<b>Send file by email</b><br/>
+<b>Send file by email (deprecated)</b><br/>
 You can send your log file by email use `send($to)`. Method will grab contents of your log file and send it as message of email.
 
 ```
 $logger->send('somebody@email.com');
 ```
 Your server must support `sendmail` to use the above. If you're using UNIX-like systems please take care of installing <a href="http://www.postfix.org">postfix</a>. 
+
+<br/>
+
+<b>Send file as attachment by email (powered by PHPMailer)</b><br/>
+If you want to use file sending first you must set up some constants in `MailerClient.php` about your mail server and mail account. 
+When you done that you can use `sendAsAttachemnt()` method for sending log files in email attachment by using that simple line of code:
+
+```
+$logger->sendAsAttachment('somebody@email.com');
+```
+
+If you want to specify your own attachment file (path to it) and/or email message use additional parameters:
+
+```
+$logger->sendAsAttachment('somebody@email.com', 'path/to/attachment', 'some message');
+```
+
+<br/>
+
+<b>Move and copy files</b><br/>
+
+You can move your file to another destination.
+
+```
+$logger->move('new/path/to/file.log');
+```
+
+If you want to move another file than active log file use second argument to point what other file you want to move.
+
+```
+$logger->move('new/path/to/file.log', 'file/to/move.log');
+```
+
+If you want to just copy file some place else use `copy()` method:
+
+```
+$logger->copy('where/to/copy/file.txt');
+``` 
+
+And similar to the `move` method you can point another file to copy, if you don't want to copy your current log file.
+
+```
+$logger->copy('where/to/copy/file.txt', 'what/file/to/copy.txt);
+```
 
 <br/>
 
