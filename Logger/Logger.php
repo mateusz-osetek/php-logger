@@ -284,8 +284,11 @@ class Logger implements LoggerInterface
     {
         switch ($level) {
             case 1: return '[INFO]'; break;
-            case 2: return '[WARNING]'; break;
-            case 3: return '[ERROR]'; break;
+            case 2: return '[DEBUG]'; break;
+            case 3: return '[WARNING]'; break;
+            case 4: return '[ERROR]'; break;
+            case 5: return '[FATAL]'; break;
+            case 6: return '[TRACE]'; break;
             default: return '';
         }
     }
