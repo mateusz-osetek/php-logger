@@ -72,7 +72,7 @@ $logger->put('some log content');
 You can also put some information into file, with some label next to it by adding information level as second parameter;
 
 ```php
-$logger->put('some log content', 2);
+$logger->put('some log content', 3);
 //That makes your log file looks like that:
 // 2019-09-01 12:02:32 | [WARNING] | some log content
 ```
@@ -81,8 +81,11 @@ There are three supported labels for information leveling:
 
 ```
 1 => [INFO]
-2 => [WARNING]
-3 => [ERROR]
+2 => [DEBUG]
+3 => [WARNING]
+4 => [ERROR]
+5 => [FATAL]
+6 => [TRACE]
 ```
 
 <br/>
