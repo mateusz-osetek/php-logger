@@ -144,6 +144,17 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Show variable representation of specific expression
+     *
+     * @param mixed $expression
+     * @param int $level
+     */
+    public function dump($expression, int $level = 0): void
+    {
+        $this->put(var_export($expression, true), $level);
+    }
+
+    /**
      * Get full path to a log file.
      *
      * @return string|null

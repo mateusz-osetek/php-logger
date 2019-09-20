@@ -73,6 +73,15 @@ interface LoggerInterface
     public function drop(string $path): void;
 
     /**
+     * Show variable representation of specific expression
+     *
+     * @param $expression
+     * @param int $level
+     * @return void
+     */
+    public function dump($expression, int $level): void;
+
+    /**
      * Get full path to a log file.
      *
      * @return string|null
