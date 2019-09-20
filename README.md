@@ -1,4 +1,4 @@
-<h2>Simple PHP Logger 1.1.0</h2>
+<h2>Simple PHP Logger 1.1.1</h2>
 
 <h3>Requirements</h3>
 <ul>
@@ -19,7 +19,7 @@ Download it manually from GitHub or by composer: `composer require mosetek/logge
 
 If you want to initialize logger with default path and filename (`logs/.log`) just use:
 
-```
+```php
 $logger = new Logger();
 ```
 
@@ -27,7 +27,7 @@ $logger = new Logger();
 
 If you want to initialize logger on another path with another filename you can do this by defining those while creating new object.
 
-```
+```php
 $logger = new Logger('some/path/', 'filename'); 
 ```
 
@@ -35,7 +35,7 @@ $logger = new Logger('some/path/', 'filename');
 
 Also you can initialize logger with custom date format as the last parameter. Logger's using the <a href="https://www.php.net/manual/en/function.date.php">standard PHP date() formats</a>.
 
-```
+```php
 $logger = new Logger('some/path', 'filename', 'H:i:s');
 ```
 
@@ -44,7 +44,7 @@ $logger = new Logger('some/path', 'filename', 'H:i:s');
 <b>Another path and filename options</b><br/>
 You can get path, full path to file, filename or date format any time you need:
 
-```
+```php
 $logger->getPath();        //Returns: some/path/to/
 $logger->getFullPath();    //Returns: some/path/to/file.txt
 $logger->getFilename();    //Returns: file.txt
@@ -53,7 +53,7 @@ $logger->getDateFormat();  //Returns: Y-m-d H:i:s
 
 You can also set another filename or path:
 
-```
+```php
 $logger->setPath('some/new/path');
 $logger->setFilename('new_filename.txt');
 $logger->setDateFormat('Y-m');
@@ -65,13 +65,13 @@ $logger->setDateFormat('Y-m');
 <b>Write and read files</b><br/>
 To put some content into file (defined in object creation) simply use `put()` method. 
 
-```
+```php
 $logger->put('some log content');
 ```
 
 You can also put some information into file, with some label next to it by adding information level as second parameter;
 
-```
+```php
 $logger->put('some log content', 2);
 //That makes your log file looks like that:
 // 2019-09-01 12:02:32 | [WARNING] | some log content
@@ -89,14 +89,23 @@ There are three supported labels for information leveling:
 
 If you want to read contents of your log file use `read($path): string`.
 
-```
+```php
 $logger->read();
 ```
 
 You can also read content of any other text files by adding a path parameter to read method.
 
-```
+```php
 $logger->read('some/path/to/file.txt');
+```
+
+<br/>
+
+<b>Putting variables into log file</b><br/>
+You can put more complicated structures like variables into log file by using this:
+
+```php
+$logger->dump(['some' => ['example', 'array']]);
 ```
 
 <br/>
@@ -104,7 +113,7 @@ $logger->read('some/path/to/file.txt');
 <b>Send file by email (deprecated)</b><br/>
 You can send your log file by email use `send($to)`. Method will grab contents of your log file and send it as message of email.
 
-```
+```php
 $logger->send('somebody@email.com');
 ```
 Your server must support `sendmail` to use the above. If you're using UNIX-like systems please take care of installing <a href="http://www.postfix.org">postfix</a>. 
@@ -115,13 +124,13 @@ Your server must support `sendmail` to use the above. If you're using UNIX-like 
 If you want to use file sending first you must set up some constants in `MailerClient.php` about your mail server and mail account. 
 When you done that you can use `sendAsAttachemnt()` method for sending log files in email attachment by using that simple line of code:
 
-```
+```php
 $logger->sendAsAttachment('somebody@email.com');
 ```
 
 If you want to specify your own attachment file (path to it) and/or email message use additional parameters:
 
-```
+```php
 $logger->sendAsAttachment('somebody@email.com', 'path/to/attachment', 'some message');
 ```
 
@@ -131,25 +140,25 @@ $logger->sendAsAttachment('somebody@email.com', 'path/to/attachment', 'some mess
 
 You can move your file to another destination.
 
-```
+```php
 $logger->move('new/path/to/file.log');
 ```
 
 If you want to move another file than active log file use second argument to point what other file you want to move.
 
-```
+```php
 $logger->move('new/path/to/file.log', 'file/to/move.log');
 ```
 
 If you want to just copy file some place else use `copy()` method:
 
-```
+```php
 $logger->copy('where/to/copy/file.txt');
 ``` 
 
 And similar to the `move` method you can point another file to copy, if you don't want to copy your current log file.
 
-```
+```php
 $logger->copy('where/to/copy/file.txt', 'what/file/to/copy.txt);
 ```
 
@@ -158,13 +167,13 @@ $logger->copy('where/to/copy/file.txt', 'what/file/to/copy.txt);
 <b>Wiping and deleting log file</b><br/>
 If you want to empty content of your current file use:
 
-```
+```php
 $logger->wipe();
 ```
 
 You can also wipe any other text file by using `$path` parameter:
 
-```
+```php
 $logger->wipe('some/path/to/file.txt');
 ```
 
@@ -172,13 +181,13 @@ $logger->wipe('some/path/to/file.txt');
 
 Interface allows you to deleting files by using `drop()` method.
 
-```
+```php
 $logger->drop();
 ```
 
 Of course you can determine path to another file to drop as well
 
-```
+```php
 $logger->drop('some/path/to/file.txt');
 ```
 
@@ -187,13 +196,13 @@ $logger->drop('some/path/to/file.txt');
 <b>Checking size of file</b><br/>
 You can check the size of a file by using below:
 
-```
+```php
 $logger->getFilesize();
 ```
 
 Method by default returns size in megabytes. You can determine another unit by passing argument.
 
-```
+```php
 $logger->getFilezise();       //Returns in megabytes
 $logger->getFilezise('B');    //Returns in bytes
 $logger->getFilezise('KB');   //Returns in kilobytes
@@ -202,7 +211,7 @@ $logger->getFilezise('GB');   //Returns in gigabytes
 
 If you want you can check size of any other file by passing path in second argument:
 
-```
+```php
 $logger->getFilesize('MB', 'path/to/file.txt');
 ```
 
