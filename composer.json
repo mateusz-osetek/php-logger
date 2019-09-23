@@ -1,7 +1,7 @@
 {
     "name": "mosetek/logger",
     "description": "Simple interface for information and errors logging",
-    "keywords": ["log", "logger"],
+    "keywords": ["log", "logger", "universal logger", "php", "php logger", "filesystem"],
     "type": "library",
     "homepage": "https://github.com/mateusz-osetek/php-logger",
     "license": "MIT",

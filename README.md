@@ -1,4 +1,4 @@
-<h2>Simple PHP Logger 1.1.1</h2>
+<h2>Simple PHP Logger 1.1.2</h2>
 
 <h3>Requirements</h3>
 <ul>
@@ -63,10 +63,12 @@ $logger->setDateFormat('Y-m');
 <br/>
 
 <b>Write and read files</b><br/>
-To put some content into file (defined in object creation) simply use `put()` method. 
+To put some content into file (defined in object creation) simply use `put()` method.
+You can log into file text, numbers and more complicated data structures like arrays and objects
 
 ```php
 $logger->put('some log content');
+$logger->put(['some' => ['nice', 'array']);
 ```
 
 You can also put some information into file, with some label next to it by adding information level as second parameter;
@@ -88,6 +90,12 @@ There are three supported labels for information leveling:
 6 => [TRACE]
 ```
 
+If you want to put data on different path you can declare it in third argument:
+
+```php
+$logger->put('some log content on custom path', 0, 'custom/path/to/log.txt');
+```
+
 <br/>
 
 If you want to read contents of your log file use `read($path): string`.
@@ -104,7 +112,7 @@ $logger->read('some/path/to/file.txt');
 
 <br/>
 
-<b>Putting variables into log file</b><br/>
+<b>Putting variables into log file (deprecated: use put() instead)</b><br/>
 You can put more complicated structures like variables into log file by using this:
 
 ```php
@@ -113,7 +121,7 @@ $logger->dump(['some' => ['example', 'array']]);
 
 <br/>
 
-<b>Send file by email (deprecated)</b><br/>
+<b>Send file by email (deprecated: use sendAsAttachment() instead)</b><br/>
 You can send your log file by email use `send($to)`. Method will grab contents of your log file and send it as message of email.
 
 ```php
@@ -125,7 +133,7 @@ Your server must support `sendmail` to use the above. If you're using UNIX-like 
 
 <b>Send file as attachment by email (powered by PHPMailer)</b><br/>
 If you want to use file sending first you must set up some constants in `MailerClient.php` about your mail server and mail account. 
-When you done that you can use `sendAsAttachemnt()` method for sending log files in email attachment by using that simple line of code:
+When you done that you can use `sendAsAttachment()` method for sending log files in email attachment by using that simple line of code:
 
 ```php
 $logger->sendAsAttachment('somebody@email.com');

@@ -11,10 +11,11 @@ interface LoggerInterface
     /**
      * Put content into a file.
      *
-     * @param string $message
+     * @param mixed $message
      * @param int $level
+     * @param string $path
      */
-    public function put(string $message, int $level): void;
+    public function put($message, int $level, string $path): void;
 
     /**
      * Read content of a log file.

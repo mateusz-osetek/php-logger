@@ -52,14 +52,23 @@ class Logger implements LoggerInterface
     /**
      * Put content into a file.
      *
-     * @param string $message
+     * @param mixed $message
      * @param int $level
+     * @param string $path
      */
-    public function put(string $message, int $level = 0): void
+    public function put($message, int $level = 0, string $path = ''): void
     {
-        $message = date($this->dateFormat) . " {$this->getErrorLevel($level)} | {$message}" . PHP_EOL;
-        $flag = file_exists($this->getFullPath()) ? FILE_APPEND : 0;
-        file_put_contents($this->fullPath, $message, $flag);
+        is_string($message) ?: $message = var_export($message);
+        $path ?: $path = $this->getFullPath();
+
+        $label = ' ';
+        if ((bool) $level) {
+            $label = ' ' . $this->getErrorLevel($level) . ' ';
+        }
+
+        $data = date($this->dateFormat) . $label . '| ' . $message . PHP_EOL;
+        $flag = file_exists($path) ? FILE_APPEND : 0;
+        file_put_contents($path, $data, $flag);
     }
 
     /**
@@ -81,7 +90,7 @@ class Logger implements LoggerInterface
      */
     public function move(string $to, string $from = ''): void
     {
-        $from ?: $this->getFullPath();
+        $from ?: $form = $this->getFullPath();
         $this->copy($to, $from);
         $this->drop($from);
     }
@@ -144,6 +153,7 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * @deprecated use Logger::put() instead
      * Show variable representation of specific expression
      *
      * @param mixed $expression
@@ -214,7 +224,7 @@ class Logger implements LoggerInterface
      */
     public function getFilesize(?string $unit = 'MB', ?string $path = ''): ?float
     {
-        $path = $path ?: $this->getFullPath();
+        $path ?: $path = $this->getFullPath();
         $filesize = filesize($path);
 
         switch ($unit) {
