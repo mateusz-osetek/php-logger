@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mosetek\Logger;
 
 /**
@@ -122,9 +124,9 @@ interface LoggerInterface
      *
      * @param string|null $path
      * @param string $unit
-     * @return float|null
+     * @return float|int|null
      */
-    public function getFilesize(string $unit, ?string $path): ?float;
+    public function getFilesize(string $unit, ?string $path);
 
     /**
      * Get a log file date format.

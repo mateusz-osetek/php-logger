@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mosetek\Logger;
 
 /**
@@ -8,6 +10,13 @@ namespace mosetek\Logger;
 
 class Logger implements LoggerInterface
 {
+    private const WHITESPACE = ' ';
+    private const VERTICAL_BAR_PIPE = '|';
+    private const DEFAULT_MAIL_TOPIC = 'Log information from';
+    private const DEFAULT_LOGS_FOLDER = 'logs';
+    private const DEFAULT_FILENAME = '.log';
+    private const DEFAULT_DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @var string
      */
@@ -40,8 +49,11 @@ class Logger implements LoggerInterface
      * @param string $filename
      * @param string $dateFormat
      */
-    public function __construct(string $path = 'logs', string $filename = '.log', string $dateFormat = 'Y-m-d H:i:s')
-    {
+    public function __construct(
+        string $path = self::DEFAULT_LOGS_FOLDER,
+        string $filename = self::DEFAULT_FILENAME,
+        string $dateFormat = self::DEFAULT_DATE_FORMAT
+    ) {
         $this->path = $path;
         $this->filename = $filename;
         $this->dateFormat = $dateFormat;
@@ -61,12 +73,12 @@ class Logger implements LoggerInterface
         is_string($message) ?: $message = var_export($message);
         $path ?: $path = $this->getFullPath();
 
-        $label = ' ';
+        $label = self::WHITESPACE;
         if ((bool) $level) {
-            $label = ' ' . $this->getErrorLevel($level) . ' ';
+            $label = self::WHITESPACE . $this->getErrorLevel($level) . self::WHITESPACE;
         }
 
-        $data = date($this->dateFormat) . $label . '| ' . $message . PHP_EOL;
+        $data = date($this->dateFormat) . $label . self::VERTICAL_BAR_PIPE . self::WHITESPACE . $message . PHP_EOL;
         $flag = file_exists($path) ? FILE_APPEND : 0;
         file_put_contents($path, $data, $flag);
     }
@@ -117,7 +129,7 @@ class Logger implements LoggerInterface
     {
         mail(
             $to,
-            $subject ?: 'Log information from ' . date($this->dateFormat),
+            $subject ?: self::DEFAULT_MAIL_TOPIC . self::WHITESPACE . date($this->dateFormat),
             $this->read()
         );
     }
@@ -220,9 +232,9 @@ class Logger implements LoggerInterface
      *
      * @param string|null $path
      * @param string $unit
-     * @return float|null
+     * @return float|int|null
      */
-    public function getFilesize(?string $unit = 'MB', ?string $path = ''): ?float
+    public function getFilesize(?string $unit = 'MB', ?string $path = '')
     {
         $path ?: $path = $this->getFullPath();
         $filesize = filesize($path);

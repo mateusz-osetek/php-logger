@@ -1,4 +1,4 @@
-<h2>Simple PHP Logger 1.1.2</h2>
+<h2>Simple PHP Logger 1.1.3 [unreleased]</h2>
 
 <h3>Requirements</h3>
 <ul>
