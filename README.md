@@ -1,4 +1,4 @@
-<h2>Simple PHP Logger 1.1.2</h2>
+<h2>Simple PHP Logger 1.1.3</h2>
 
 <h3>Requirements</h3>
 <ul>
@@ -63,18 +63,18 @@ $logger->setDateFormat('Y-m');
 <br/>
 
 <b>Write and read files</b><br/>
-To put some content into file (defined in object creation) simply use `put()` method.
+To put some content into file (defined in object creation) simply use `log()` method.
 You can log into file text, numbers and more complicated data structures like arrays and objects
 
 ```php
-$logger->put('some log content');
-$logger->put(['some' => ['nice', 'array']);
+$logger->log('some log content');
+$logger->log(['some' => ['nice', 'array']);
 ```
 
 You can also put some information into file, with some label next to it by adding information level as second parameter;
 
 ```php
-$logger->put('some log content', 3);
+$logger->log('some log content', 3);
 //That makes your log file looks like that:
 // 2019-09-01 12:02:32 | [WARNING] | some log content
 ```
@@ -93,7 +93,22 @@ There are three supported labels for information leveling:
 If you want to put data on different path you can declare it in third argument:
 
 ```php
-$logger->put('some log content on custom path', 0, 'custom/path/to/log.txt');
+$logger->log('some log content on custom path', 0, 'custom/path/to/log.txt');
+```
+
+<br/>
+
+You can also put simple text without any date or special characters into your file by using `text()` method.
+
+```php
+$logger->text('Hello world');
+```
+
+`text()` allows you to specify ending of line or text by adding additional param like that:
+```php
+$logger->text('Hello world', ', ');
+$logger->text('bye world.', PHP_EOL);
+$logger->text('New line, world');
 ```
 
 <br/>
@@ -112,7 +127,7 @@ $logger->read('some/path/to/file.txt');
 
 <br/>
 
-<b>Putting variables into log file (deprecated: use put() instead)</b><br/>
+<b>Putting variables into log file (deprecated: use log() instead)</b><br/>
 You can put more complicated structures like variables into log file by using this:
 
 ```php
@@ -121,29 +136,13 @@ $logger->dump(['some' => ['example', 'array']]);
 
 <br/>
 
-<b>Send file by email (deprecated: use sendAsAttachment() instead)</b><br/>
+<b>Send file by email (deprecated)</b><br/>
 You can send your log file by email use `send($to)`. Method will grab contents of your log file and send it as message of email.
 
 ```php
 $logger->send('somebody@email.com');
 ```
 Your server must support `sendmail` to use the above. If you're using UNIX-like systems please take care of installing <a href="http://www.postfix.org">postfix</a>. 
-
-<br/>
-
-<b>Send file as attachment by email (powered by PHPMailer)</b><br/>
-If you want to use file sending first you must set up some constants in `MailerClient.php` about your mail server and mail account. 
-When you done that you can use `sendAsAttachment()` method for sending log files in email attachment by using that simple line of code:
-
-```php
-$logger->sendAsAttachment('somebody@email.com');
-```
-
-If you want to specify your own attachment file (path to it) and/or email message use additional parameters:
-
-```php
-$logger->sendAsAttachment('somebody@email.com', 'path/to/attachment', 'some message');
-```
 
 <br/>
 

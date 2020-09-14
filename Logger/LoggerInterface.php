@@ -18,6 +18,24 @@ interface LoggerInterface
     public function put($message, int $level, string $path): void;
 
     /**
+     * Put content into a file with actual date and flag.
+     *
+     * @param mixed $message
+     * @param int $level
+     * @param string $path
+     */
+    public function log($message, int $level, string $path): void;
+
+    /**
+     * Put simple text into file
+     *
+     * @param mixed $message
+     * @param string $path
+     * @param string|null $eol
+     */
+    public function text($message, string $path, string $eol): void;
+
+    /**
      * Read content of a log file.
      *
      * @param string|null $path
@@ -48,15 +66,6 @@ interface LoggerInterface
      * @param string $subject
      */
     public function send(string $to, string $subject): void;
-
-    /**
-     * Email a log file as an attachment
-     *
-     * @param string $to
-     * @param string $attachment
-     * @param string $message
-     */
-    public function sendAsAttachment(string $to, string $attachment, string $message): void;
 
     /**
      * @deprecated use Logger::sendAsAttachment() instead

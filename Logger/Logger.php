@@ -50,6 +50,7 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * @deprecated
      * Put content into a file.
      *
      * @param mixed $message
@@ -67,6 +68,46 @@ class Logger implements LoggerInterface
         }
 
         $data = date($this->dateFormat) . $label . '| ' . $message . PHP_EOL;
+        $flag = file_exists($path) ? FILE_APPEND : 0;
+        file_put_contents($path, $data, $flag);
+    }
+
+    /**
+     * @deprecated
+     * Put content into a file with actual date and flag.
+     *
+     * @param mixed $message
+     * @param int $level
+     * @param string $path
+     */
+    public function log($message, int $level = 0, string $path = ''): void
+    {
+        is_string($message) ?: $message = var_export($message);
+        $path ?: $path = $this->getFullPath();
+
+        $label = ' ';
+        if ((bool) $level) {
+            $label = ' ' . $this->getErrorLevel($level) . ' ';
+        }
+
+        $data = date($this->dateFormat) . $label . '| ' . $message . PHP_EOL;
+        $flag = file_exists($path) ? FILE_APPEND : 0;
+        file_put_contents($path, $data, $flag);
+    }
+
+    /**
+     * Put simple text into file
+     *
+     * @param mixed $message
+     * @param string $path
+     * @param string|null $eol
+     */
+    public function text($message, string $path, string $eol = ''): void
+    {
+        is_string($message) ?: $message = var_export($message);
+        $path ?: $path = $this->getFullPath();
+
+        $data = $message . $eol;
         $flag = file_exists($path) ? FILE_APPEND : 0;
         file_put_contents($path, $data, $flag);
     }
@@ -107,7 +148,7 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @deprecated use Logger::sendAsAttachment() instead
+     * @deprecated
      * Email a log file.
      *
      * @param string $to
@@ -120,16 +161,6 @@ class Logger implements LoggerInterface
             $subject ?: 'Log information from ' . date($this->dateFormat),
             $this->read()
         );
-    }
-
-    /**
-     * @param string $to
-     * @param string $attachment
-     * @param string $message
-     */
-    public function sendAsAttachment(string $to, string $attachment = '', string $message = ''): void
-    {
-        $this->mailerClient->send($to, $attachment ?: $this->getFullPath(), $message);
     }
 
     /**
