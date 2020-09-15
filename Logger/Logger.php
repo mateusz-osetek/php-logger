@@ -73,7 +73,6 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * @deprecated
      * Put content into a file with actual date and flag.
      *
      * @param mixed $message
