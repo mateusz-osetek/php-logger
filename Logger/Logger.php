@@ -29,11 +29,6 @@ class Logger implements LoggerInterface
     private $fullPath;
 
     /**
-     * @var MailerClient
-     */
-    private $mailerClient;
-
-    /**
      * Logger constructor.
      *
      * @param string $path
@@ -45,7 +40,6 @@ class Logger implements LoggerInterface
         $this->path = $path;
         $this->filename = $filename;
         $this->dateFormat = $dateFormat;
-        $this->mailerClient = new MailerClient();
         $this->setFullPath();
     }
 
